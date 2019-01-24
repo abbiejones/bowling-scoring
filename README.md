@@ -16,13 +16,13 @@ Step 1: Navigate into `lets-go-bowling/src`
 
 Step 2: Start server
 ```
-python server.py
+python3 server.py
 ```
 
 Step 3: In a new terminal, start client
 
 ```
-python client.py
+python3 client.py
 ```
 
 Try allowing multiple clients to keep score at once 
@@ -35,8 +35,8 @@ Step 4: Read the instructions presented to you in the terminal and begin playing
 To run unit tests:
 
 ```
-python testparseuserinput.py
-python testupdatescore.py
+python3 testparseuserinput.py
+python3 testupdatescore.py
 
 ```
 
