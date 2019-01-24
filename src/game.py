@@ -11,19 +11,20 @@ class Game:
 
 
     def rules_of_game(self):
-        print("Pool Scoring Application\n"
-              "When prompted for the next frame score,\n"
-              "please enter it in the following format: \n\n"
-              "[],[]\n\n"
-              "or possibly (in the 10th & final frame)\n\n"
-              "[],[],[]\n\n"
-              "Examples of valid scores:\n"
-              "X\n"
-              "7,/\n"
-              "7,2\n"
-              "7,/,3\n"
-              "To quit game before you are finished, please enter:\n"
-              "quit\n")
+        return "Pool Scoring Application\n" \
+               "When prompted for the next frame score,\n"\
+              "please enter it in the following format: \n\n"\
+              "[],[]\n\n"\
+              "or possibly (in the 10th & final frame)\n\n"\
+              "[],[],[]\n\n"\
+              "Examples of valid scores:\n"\
+              "X\n"\
+              "7,/\n"\
+              "7,2\n"\
+              "7,/,3\n"\
+              "To quit game before you are finished, please enter:\n"\
+              "quit\n\n" \
+               "Please enter the score for Frame 1: \n"
 
 
     def add_frame(self):
@@ -33,9 +34,9 @@ class Game:
 
 
     def print_score(self):
-        print("\nCurrent score \n"
-              "at Frame {}:\n"
-              "{}\n".format(self.frame + 1, self.runningScore))
+        return "\nCurrent score \n" \
+              "at Frame {}:\n" \
+              "{}\n".format(self.frame + 1, self.runningScore)
 
     def frame_score(self, frame1,frame2=0):
         score = 0
@@ -93,33 +94,36 @@ class Game:
         if frame_score.lower() == "quit":
             return -1
 
-        valid_expression = "^X|[0-9],([0-9]|\/)$"
+        valid_expression = "X|[0-9],([0-9]|\/)"
 
         self.frame_input = frame_score.replace(" ", "")
 
         if self.frame < 9:
-            if re.search(valid_expression, self.frame_input):
+
+            if re.match(valid_expression, self.frame_input) and (len(self.frame_input) == 1 or len(self.frame_input) == 3):
 
                 self.frame_input = self.frame_input.split(",")
 
-                if len(self.frame_input) == 2 and self.frame_score(self.frame_input[0], self.frame_input[1]) > 10:
+                if len(self.frame_input) == 3 or len(self.frame_input) == 2 and \
+                        self.frame_score(self.frame_input[0], self.frame_input[1]) > 10:
                     return 0
+
                 return 1
 
         valid_tenth_expression = "^(X,([0-9]|X),([0-9]|X|\/))|([0-9],\/,([0-9]|X))|([0-9],[0-9])$"
 
         if self.frame == 9:
-            if re.search(valid_tenth_expression, self.frame_input):
+            if re.match(valid_tenth_expression, self.frame_input) and (len(self.frame_input) == 3 or len(self.frame_input) == 5):
                 self.frame_input = self.frame_input.split(",")
                 if len(self.frame_input) == 2 and self.frame_score(self.frame_input[0], self.frame_input[1]) > 10:
                     return 0
 
-                if len(self.frame_input) == 3 and self.frame_input[1] != '/' and \
+                if len(self.frame_input) == 3 and self.frame_input[1] != '/' and self.frame_input[1] != 'X' and \
                         self.frame_score(self.frame_input[1], self.frame_input[2]) > 10:
                     return 0
 
                 return 1
-
+        return 0
 
     def game_play(self):
         self.rules_of_game()
@@ -148,10 +152,3 @@ class Game:
 
                 self.add_frame()
                 self.print_score()
-
-
-
-def start_game():
-
-    game = Game("abbie")
-    game.game_play()
