@@ -19,11 +19,6 @@ Step 2: Start server
 python server.py
 ```
 
-To disconnect from server, type into STDIN:
-```
-/disconnect
-```
-
 Step 3: In a new terminal, start client
 
 ```

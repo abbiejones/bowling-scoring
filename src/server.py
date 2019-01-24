@@ -31,7 +31,7 @@ def server_loop():
     listening_server.bind((HOST, PORT))
     listening_server.listen(5)
     print("listening on port {}".format(PORT))
-    inputs = [listening_server, sys.stdin]
+    inputs = [listening_server]
     outputs = []
     client_to_game = {}
 
@@ -55,11 +55,6 @@ def server_loop():
                         connection.send(welcome_message.encode())
                         inputs.append(connection)
 
-                    elif s == sys.stdin:
-                        data = s.read(READ_BUFFER)  #if server wants to disconnect, it should receive a message directly from the system read  buffer
-                        if data == "/disconnect\n":
-                            inputs = [] #close everything and exit
-                            running = 0
                     else:
                         data = s.recv(READ_BUFFER)  #if readable input is from a difference socket, receive message and handle it
 
@@ -74,5 +69,6 @@ def server_loop():
 
 def main():
     server_loop()
+    exit()
 
 main()
