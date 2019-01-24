@@ -12,7 +12,7 @@ git clone git@github.com:abbiejones/lets-go-bowling.git
 
 # Usage
 
-Step 1: Navigate into lets-go-bowling/src
+Step 1: Navigate into `lets-go-bowling/src`
 
 Step 2: Start server
 ```
