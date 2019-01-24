@@ -13,7 +13,9 @@ class Game:
     def rules_of_game(self):
         return "Pool Scoring Application\n" \
                "When prompted for the next frame score,\n"\
-              "please enter it in the following format: \n\n"\
+              "please enter it in the following format: \n\n" \
+               "[]\n" \
+               "or\n"\
               "[],[]\n\n"\
               "or possibly (in the 10th & final frame)\n\n"\
               "[],[],[]\n\n"\
@@ -21,9 +23,7 @@ class Game:
               "X\n"\
               "7,/\n"\
               "7,2\n"\
-              "7,/,3\n"\
-              "To quit game before you are finished, please enter:\n"\
-              "quit\n\n" \
+              "7,/,3\n\n"\
                "Please enter the score for Frame 1: \n"
 
 
@@ -34,11 +34,17 @@ class Game:
 
 
     def print_score(self):
-        return "-----------------\n" \
-               "Current score  for Player {}\n" \
-              "at Frame {}:\n" \
-              "{}\n" \
-               "-----------------\n".format(self.player[1], self.frame, self.runningScore)
+        if self.frame < 10:
+            return "-----------------\n" \
+                   "Current score  for Player {}\n" \
+                  "at Frame {}:\n" \
+                  "{}\n" \
+                   "-----------------\n".format(self.player[1], self.frame, self.runningScore)
+        else:
+            return "-----------------\n" \
+                   "Final score for Player {}:\n" \
+                  "{}\n" \
+                   "-----------------\n".format(self.player[1], self.runningScore)
 
     def frame_score(self, frame1,frame2=0):
         score = 0
@@ -93,8 +99,6 @@ class Game:
 
 
     def parse_user_input(self, frame_score):
-        if frame_score.lower() == "quit":
-            return -1
 
         valid_expression = "X|[0-9],([0-9]|\/)"
 
@@ -143,10 +147,7 @@ class Game:
                 while (not valid_answer):
                     parsed_input = self.parse_user_input(userFrameScore)
 
-                    if (parsed_input == -1):  # player wants to exit game
-                        return
-
-                    elif (parsed_input == 1):  # player's input is valid
+                    if (parsed_input == 1):  # player's input is valid
                         valid_answer = True
                         break
 

@@ -6,10 +6,6 @@ import game as g
 
 class TestParseUserInput(unittest.TestCase):
 
-    def test_quit(self):
-        game = g.Game("test")
-        self.assertEqual(game.parse_user_input("quit"), -1)
-
     def test_gibberish(self):
         game = g.Game("test")
         self.assertEqual(game.parse_user_input("aasdfh@2348"), 0)

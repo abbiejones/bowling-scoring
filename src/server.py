@@ -1,6 +1,5 @@
 import socket
 import select
-import queue
 import sys
 import game as g
 
@@ -19,9 +18,6 @@ def handle_game(s, data, client_to_game):
             current_game.add_frame()
             score = current_game.print_score()
             s.send(score.encode())
-
-        if is_valid == -1:
-            s.send("exit")
 
         if current_game.frame < 10:
             (s.send("Please enter the score for Frame {}:\n".format(current_game.frame + 1).encode()))

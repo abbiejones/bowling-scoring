@@ -6,10 +6,6 @@ import game as g
 
 class TestUpdateScore(unittest.TestCase):
 
-    def test_game(self):
-        game = g.Game("test")
-        self.assertEqual(game.parse_user_input("quit"), -1)
-
     def test_one_frame1(self):
         game = g.Game("test")
         game.frame_input = ['X']

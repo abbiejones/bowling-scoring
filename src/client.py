@@ -33,9 +33,7 @@ def client_loop():
                         print("Shutting down")
                         flag = False
                         break
-                    if data.decode() == "exit":  # disconnect is ok
-                        flag = False
-                        break
+
                     else:
                         server_msg = data.decode()
                         sys.stdout.write(server_msg)  # otherwise, echo the message that the server sent you
