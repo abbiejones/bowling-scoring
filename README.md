@@ -7,7 +7,7 @@ Let's Go Bowling is a console application written in Python that allows a player
 Please clone the git repo to begin playing:
 
 ```
-git@github.com:abbiejones/lets-go-bowling.git
+git clone git@github.com:abbiejones/lets-go-bowling.git
 ```
 
 #Usage

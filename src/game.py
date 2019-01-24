@@ -106,8 +106,7 @@ class Game:
 
                 self.frame_input = self.frame_input.split(",")
 
-                if len(self.frame_input) == 3 or len(self.frame_input) == 2 and \
-                        self.frame_score(self.frame_input[0], self.frame_input[1]) > 10:
+                if len(self.frame_input) == 3 or (len(self.frame_input) == 2 and self.frame_input[1] != '/' and self.frame_score(self.frame_input[0], self.frame_input[1]) >= 10):
                     return 0
 
                 return 1
@@ -116,12 +115,14 @@ class Game:
 
         if self.frame == 9:
             if re.match(valid_tenth_expression, self.frame_input) and (len(self.frame_input) == 3 or len(self.frame_input) == 5):
+
                 self.frame_input = self.frame_input.split(",")
-                if len(self.frame_input) == 2 and self.frame_score(self.frame_input[0], self.frame_input[1]) > 10:
+
+                if len(self.frame_input) == 2 and self.frame_input[1] != '/' and self.frame_score(self.frame_input[0], self.frame_input[1]) >= 10:
                     return 0
 
                 if len(self.frame_input) == 3 and self.frame_input[1] != '/' and self.frame_input[1] != 'X' and \
-                        self.frame_score(self.frame_input[1], self.frame_input[2]) > 10:
+                        self.frame_score(self.frame_input[1], self.frame_input[2]) >= 10:
                     return 0
 
                 return 1

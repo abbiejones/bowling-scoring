@@ -39,6 +39,10 @@ class TestParseUserInput(unittest.TestCase):
         game = g.Game("test")
         self.assertEqual(game.parse_user_input("8,9"), 0)
 
+    def test_equalsten(self):
+        game = g.Game("test")
+        self.assertEqual(game.parse_user_input("5,5"), 0)
+
     def test_strike(self):
         game = g.Game("test")
         self.assertEqual(game.parse_user_input("X"), 1)
@@ -69,6 +73,17 @@ class TestParseUserInput(unittest.TestCase):
     def test_tenthframe4(self):
         game = g.Game("test")
         self.assertEqual(game.parse_user_input("X, 1, 1"), 0)
+
+    def test_tenthframe5(self):
+        game = g.Game("test")
+        game.frame = 9
+        self.assertEqual(game.parse_user_input("X, 5, 5"), 0)
+
+    def test_tenthframe6(self):
+        game = g.Game("test")
+        game.frame = 9
+        self.assertEqual(game.parse_user_input("X, 8, 9"), 0)
+
 
 if __name__ == '__main__':
     unittest.main()
