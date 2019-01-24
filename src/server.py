@@ -10,6 +10,7 @@ READ_BUFFER = 4096
 
 def handle_game(s, data, client_to_game):
     current_game = client_to_game[s]
+    score = 0
 
     if not current_game.is_game_over():
         is_valid = current_game.parse_user_input(data.decode())
@@ -22,7 +23,10 @@ def handle_game(s, data, client_to_game):
         if is_valid == -1:
             s.send("exit")
 
-        s.send("Please enter the score for Frame {}:\n".format(current_game.frame + 1).encode())
+        if current_game.frame < 10:
+            (s.send("Please enter the score for Frame {}:\n".format(current_game.frame + 1).encode()))
+        else:
+            s.send("Game over!\n\n".encode())
 
 def server_loop():
 
@@ -31,38 +35,46 @@ def server_loop():
     listening_server.bind((HOST, PORT))
     listening_server.listen(5)
     print("listening on port {}".format(PORT))
-    inputs = [listening_server]
+    inputs = [listening_server, sys.stdin]
     outputs = []
     client_to_game = {}
 
-    while inputs:
-        readable, writable, exceptional = select.select(
-            inputs, outputs, inputs)
+    running = 1
 
-        for s in readable:
-            if s is listening_server:
-                connection, client_address = s.accept()
-                connection.setblocking(0)
+    while running:
+        try:
+            while inputs:
+                readable, writable, exceptional = select.select(
+                    inputs, outputs, inputs)
 
-                game = g.Game(client_address)
-                client_to_game[connection] = game
+                for s in readable:
+                    if s is listening_server:
+                        connection, client_address = s.accept()
+                        connection.setblocking(0)
 
-                welcome_message = game.rules_of_game()
-                connection.send(welcome_message.encode())
-                inputs.append(connection)
+                        game = g.Game(client_address)
+                        client_to_game[connection] = game
 
-            elif s == sys.stdin:
-                data = s.recv(READ_BUFFER)  #if server wants to disconnect, it should receive a message directly from the system read  buffer
-                if data == "/disconnect":
-                    inputs = [] #close everything and exit
-                    break
-            else:
-                data = s.recv(READ_BUFFER)  #if readable input is from a difference socket, receive message and handle it
+                        welcome_message = game.rules_of_game()
+                        connection.send(welcome_message.encode())
+                        inputs.append(connection)
 
-                if data:
-                    handle_game(s, data, client_to_game)
+                    elif s == sys.stdin:
+                        data = s.read(READ_BUFFER)  #if server wants to disconnect, it should receive a message directly from the system read  buffer
+                        if data == "/disconnect\n":
+                            inputs = [] #close everything and exit
+                            running = 0
+                    else:
+                        data = s.recv(READ_BUFFER)  #if readable input is from a difference socket, receive message and handle it
 
+                        if data:
+                            handle_game(s, data, client_to_game)
 
+        except:
+            sys.stdout.write("Server shutting down\n")
+            break
+
+    listening_server.close()
 
 def main():
     server_loop()

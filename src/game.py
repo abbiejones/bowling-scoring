@@ -34,9 +34,11 @@ class Game:
 
 
     def print_score(self):
-        return "\nCurrent score \n" \
+        return "-----------------\n" \
+               "Current score  for Player {}\n" \
               "at Frame {}:\n" \
-              "{}\n".format(self.frame + 1, self.runningScore)
+              "{}\n" \
+               "-----------------\n".format(self.player[1], self.frame, self.runningScore)
 
     def frame_score(self, frame1,frame2=0):
         score = 0

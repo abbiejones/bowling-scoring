@@ -12,18 +12,26 @@ git@github.com:abbiejones/lets-go-bowling.git
 
 #Usage
 
-Navigate into lets-go-bowling/src
+Step 1: Navigate into lets-go-bowling/src
 
-Start server:
+Step 2: Start server
 ```
 python server.py
 ```
 
-In a new terminal, start client and follow instructions for keeping score:
+To disconnect from server, type into STDIN:
+```
+/disconnect
+```
+
+Step 3: In a new terminal, start client
 
 ```
 python client.py
 ```
+
+Try allowing multiple clients to keep score at once 
+(i.e. you can repeat step 3 multiple times)
 
 #Tests
 
@@ -33,10 +41,5 @@ To run unit tests:
 python testparseuserinput.py
 python testupdatescore.py
 
-```
-
-To run integration tests:
-```
-bash script here
 ```
 
