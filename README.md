@@ -1,6 +1,6 @@
 # Let's Go Bowling
 
-Let's Go Bowling is a console application written in Python that allows a player to keep track of their bowling score at each frame as they play.
+Let's Go Bowling is a console application written in Python that allows multiple players to keep track of their bowling score at each frame as they play.
 
 ## Installation
 
