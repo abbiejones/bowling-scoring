@@ -28,6 +28,8 @@ python client.py
 Try allowing multiple clients to keep score at once 
 (i.e. you can repeat step 3 multiple times)
 
+Step 4: Read the instructions presented to you in the terminal and begin playing!
+
 # Tests
 
 To run unit tests:
