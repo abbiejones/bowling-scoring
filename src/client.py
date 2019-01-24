@@ -1,3 +1,6 @@
+#Abbie Jones
+#Client sends frame scores to server and prints out response
+
 import socket
 import sys
 import select
@@ -10,9 +13,7 @@ def client_loop():
     # create a socket
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    # connect to server
     host = "localhost"  # server address
-    # port = int(sys.argv[1])  # server port
     port = 8080
     s.connect((host, port))
     s.setblocking(False)
@@ -42,23 +43,18 @@ def client_loop():
                             flag= False
                             break
 
-                    # sys.stdout.write(prompt)
                     sys.stdout.flush()
                 else:
                     data = input()  # otherwise, it is a message you want to send from system buffer
                     if data:
                         s.sendall(data.encode())  # send to server
         except:
-            sys.stdout.write("Client shutting down\n")  # exception block, gracefully shut down
-            if s:
-                msg = "/disconnect"
-                s.send(msg.encode())
-            s.close()
+            sys.stdout.write("Client shutting down\n")
             break
 
 def main():
 
-    if len(sys.argv) != 1:  # gracefully handle incorrect usage of python file
+    if len(sys.argv) != 1:
         print("Usage: client.py\n")
         sys.exit(1)
 

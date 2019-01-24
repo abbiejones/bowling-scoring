@@ -1,3 +1,6 @@
+#Abbie Jones
+#lets-go-bowling server polls for new requests from clients and manages games
+
 import socket
 import select
 import sys
@@ -12,13 +15,14 @@ def handle_game(s, data, client_to_game):
     score = 0
 
     if not current_game.is_game_over():
-        is_valid = current_game.parse_user_input(data.decode())
+        is_valid = current_game.parse_user_input(data.decode()) #parse data from user
 
         if is_valid == 1:
-            current_game.add_frame()
+            current_game.add_frame() #add frame to list
             score = current_game.print_score()
             s.send(score.encode())
 
+        #print score
         if current_game.frame < 10:
             (s.send("Please enter the score for Frame {}:\n".format(current_game.frame + 1).encode()))
         else:
@@ -37,7 +41,7 @@ def server_loop():
 
     running = 1
 
-    while running:
+    while running: #continuously polling for requests
         try:
             while inputs:
                 readable, writable, exceptional = select.select(
@@ -48,24 +52,26 @@ def server_loop():
                         connection, client_address = s.accept()
                         connection.setblocking(0)
 
-                        game = g.Game(client_address)
-                        client_to_game[connection] = game
+                        game = g.Game(client_address) #starts new game
+                        client_to_game[connection] = game #maps client address to game
 
                         welcome_message = game.rules_of_game()
                         connection.send(welcome_message.encode())
+
                         inputs.append(connection)
 
                     else:
                         data = s.recv(READ_BUFFER)  #if readable input is from a difference socket, receive message and handle it
 
                         if data:
-                            handle_game(s, data, client_to_game)
+                            handle_game(s, data, client_to_game) #handles game per user
 
         except:
             sys.stdout.write("Server shutting down\n")
             break
 
     listening_server.close()
+
 
 def main():
     server_loop()

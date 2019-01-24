@@ -1,13 +1,16 @@
+#Abbie Jones
+#Game class to control individual bowling game
+
 import re
 
 class Game:
 
     def __init__(self, player):
         self.player = player
-        self.frame = 0
+        self.frame = 0 #current frame
         self.runningScore = 0
-        self.trackFrames = []
-        self.frame_input = None
+        self.trackFrames = [] #list of frame scores
+        self.frame_input = None #per frame input from user
 
 
     def rules_of_game(self):
@@ -27,6 +30,7 @@ class Game:
                "Please enter the score for Frame 1: \n"
 
 
+    #append new frame score to list
     def add_frame(self):
         self.trackFrames.append(self.frame_input)
         self.update_score()
@@ -46,6 +50,8 @@ class Game:
                   "{}\n" \
                    "-----------------\n".format(self.player[1], self.runningScore)
 
+
+    #helper function for calculating score after frame score list is flattened
     def frame_score(self, frame1,frame2=0):
         score = 0
         if frame1 == 'X':
@@ -66,29 +72,31 @@ class Game:
     def update_score(self):
 
         runningScore = 0
+
+        #flatten list so scores aren't divided into frames
         flattened_frames = [subframe for frame in self.trackFrames for subframe in frame]
 
         for x in range(len(flattened_frames)):
             if flattened_frames[x] == 'X':
 
-                if x + 2 < len(flattened_frames):
+                if x + 2 < len(flattened_frames): #only update score if you can lookahead two rolls
                     runningScore += 10 + self.frame_score(flattened_frames[x+1], flattened_frames[x+2])
 
             elif flattened_frames[x] == '/':
 
-                if x + 1 < len(flattened_frames):
+                if x + 1 < len(flattened_frames): #only update score if you can lookahead one roll
                     runningScore += 10 + self.frame_score(flattened_frames[x+1])
 
-                runningScore -= self.frame_score(flattened_frames[x-1])
+                runningScore -= self.frame_score(flattened_frames[x-1]) #remove weight from first roll in spare
 
-                if self.frame == 9 and ((x + 2) == len(flattened_frames)):
+                if self.frame == 9 and ((x + 2) == len(flattened_frames)): #don't doubly add scores from final frame
                     break
 
             else:
                 runningScore += self.frame_score(flattened_frames[x])
 
 
-        self.runningScore = runningScore
+        self.runningScore = runningScore #update field
 
 
     def is_game_over(self):
@@ -107,52 +115,54 @@ class Game:
         if self.frame < 9:
 
             if re.match(valid_expression, self.frame_input) and (len(self.frame_input) == 1 or len(self.frame_input) == 3):
+            #if input matches regex, and its length is either 1 or 3
+                self.frame_input = self.frame_input.split(",") #split it up
 
-                self.frame_input = self.frame_input.split(",")
-
-                if len(self.frame_input) == 3 or (len(self.frame_input) == 2 and self.frame_input[1] != '/' and self.frame_score(self.frame_input[0], self.frame_input[1]) >= 10):
+                if len(self.frame_input) == 3 or (len(self.frame_input) == 2 and self.frame_input[1] != '/' and self.frame_score(self.frame_input[0], self.frame_input[1]) >= 10): #make sure list isn't of length 3 and that it doesn't equal 10 or more
                     return 0
 
-                return 1
+                return 1 #valid
 
         valid_tenth_expression = "^(X,([0-9]|X),([0-9]|X|\/))|([0-9],\/,([0-9]|X))|([0-9],[0-9])$"
 
         if self.frame == 9:
             if re.match(valid_tenth_expression, self.frame_input) and (len(self.frame_input) == 3 or len(self.frame_input) == 5):
-
+                #if input matches regex and its length is either 3 or 5
                 self.frame_input = self.frame_input.split(",")
 
-                if len(self.frame_input) == 2 and self.frame_input[1] != '/' and self.frame_score(self.frame_input[0], self.frame_input[1]) >= 10:
+                if len(self.frame_input) == 2 and self.frame_input[1] != '/' and self.frame_score(self.frame_input[0], self.frame_input[1]) >= 10:  #make sure scores don't add up to 10 or greater
                     return 0
 
                 if len(self.frame_input) == 3 and self.frame_input[1] != '/' and self.frame_input[1] != 'X' and \
-                        self.frame_score(self.frame_input[1], self.frame_input[2]) >= 10:
+                        self.frame_score(self.frame_input[1], self.frame_input[2]) >= 10: #alt. make sure scores don't add up to 10 or greater
                     return 0
 
                 return 1
         return 0
 
-    def game_play(self):
-        self.rules_of_game()
+    #for testing
 
-        if (input("Ready to start? (y/n) ").lower() == "y"):
-
-            while (not self.is_game_over()):
-
-                valid_answer = False
-                userFrameScore = None
-
-                userFrameScore = input("Please enter the score for frame {}: ".format(self.frame + 1))
-
-                while (not valid_answer):
-                    parsed_input = self.parse_user_input(userFrameScore)
-
-                    if (parsed_input == 1):  # player's input is valid
-                        valid_answer = True
-                        break
-
-                    userFrameScore = input("Please try again: ".format(self.frame + 1))
-
-
-                self.add_frame()
-                self.print_score()
+    # def game_play(self):
+    #     self.rules_of_game()
+    #
+    #     if (input("Ready to start? (y/n) ").lower() == "y"):
+    #
+    #         while (not self.is_game_over()):
+    #
+    #             valid_answer = False
+    #             userFrameScore = None
+    #
+    #             userFrameScore = input("Please enter the score for frame {}: ".format(self.frame + 1))
+    #
+    #             while (not valid_answer):
+    #                 parsed_input = self.parse_user_input(userFrameScore)
+    #
+    #                 if (parsed_input == 1):  # player's input is valid
+    #                     valid_answer = True
+    #                     break
+    #
+    #                 userFrameScore = input("Please try again: ".format(self.frame + 1))
+    #
+    #
+    #             self.add_frame()
+    #             self.print_score()
